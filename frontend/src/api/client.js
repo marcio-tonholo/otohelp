@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://otohelp.onrender.com';
+const API_URL = 'https://otohelp.onrender.com/api'; // URL do backend
 
 const api = axios.create({
   baseURL: API_URL,
