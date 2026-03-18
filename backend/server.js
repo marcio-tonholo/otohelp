@@ -17,7 +17,11 @@ const app = express();
 connectDB();
 
 // Middlewares
-app.use(cors());
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' ? 'https://otohelp.vercel.app' : 'http://localhost:3000',
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
