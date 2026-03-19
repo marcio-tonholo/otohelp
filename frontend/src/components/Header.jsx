@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import NotificationBell from './NotificationBell';
+import { FaBars, FaTimes } from 'react-icons/fa';
 import './Header.css';
 
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuthStore();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <header className="header">
@@ -44,6 +49,42 @@ const Header = () => {
               </div>
             )}
           </nav>
+
+          {/* Hamburger Menu Button */}
+          <button className="hamburger" onClick={toggleMenu}>
+            {menuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+
+          {/* Mobile Menu */}
+          {menuOpen && (
+            <div className="mobile-menu">
+              <Link to="/" onClick={closeMenu}>Home</Link>
+              <Link to="/experiences" onClick={closeMenu}>Experiências</Link>
+              <Link to="/mentors" onClick={closeMenu}>Mentores</Link>
+
+              {isAuthenticated ? (
+                <>
+                  <div className="mobile-user-info">
+                    <NotificationBell />
+                    <span>Olá, {user?.name?.split(' ')[0]}!</span>
+                  </div>
+                  <Link to="/dashboard" onClick={closeMenu}>Dashboard</Link>
+                  <button onClick={() => { logout(); closeMenu(); }} className="btn-logout">
+                    Sair
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" onClick={closeMenu} className="btn-link">
+                    Login
+                  </Link>
+                  <Link to="/register" onClick={closeMenu} className="btn-link btn-primary">
+                    Registrar
+                  </Link>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </header>
